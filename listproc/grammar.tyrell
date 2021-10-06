@@ -1,0 +1,71 @@
+enum ConstBool {
+  "true", "false"
+}
+
+enum ConstStr {
+  "_apple_", "_banana_"
+}
+enum ConstInt {
+	"-5", "-4", "-3", "-2", "-1", "0", "1", "2", "3", "4", "5"
+}
+enum ConstFn {
+	"pos", "neg", "plus", "minus", "mul", "div", "pow", "gt_zero", "lt_zero", "is_even", "is_odd"
+}
+enum ConstMfn {
+	"plus", "minus", "mul", "div", "pow"
+}
+value Empty;
+
+value Bool;
+value Int;
+value Str;
+value List;
+value Fn;
+
+[[PROGSPEC]]
+
+# consts
+func bool_const: Bool -> ConstBool;
+func int_const: Int -> ConstInt;
+func mfn_const: Fn -> ConstMfn, ConstInt;
+func fn_const: Fn -> ConstFn;
+
+# bools
+func bool_nand: Bool -> Bool, Bool;
+
+# first-order functions
+func head: Int -> List;
+func last: Int -> List;
+func take: List -> Int, List; 
+func drop: List -> Int, List;
+func access: Int -> Int, List;
+func minimum: Int -> List;
+func maximum: Int -> List;
+func reverse: List -> List;
+func sort: List -> List;
+func sum: Int -> List;
+
+# higher-order functions
+func map: List -> Fn, List;
+func filter: List -> Fn, List;
+func count: Int -> Fn, List;
+func zipwith: List -> Fn, List, List;
+func scanl1: List -> Fn, List;
+
+# basic arithmetics
+func pos: Int -> Int;
+func neg: Int -> Int;
+func plus: Int -> Int, Int;
+func minus: Int -> Int, Int;
+func mul: Int -> Int, Int;
+#func div: Int -> Int, Int; # could result in float/double, use floor for simplification
+#func pow: Int -> Int, Int; # restrict the power to non-negative Int
+func gt_zero: Bool -> Int;
+func lt_zero: Bool -> Int;
+func is_even: Bool -> Int;
+func is_odd: Bool -> Int; 
+
+func str_const: Str -> ConstStr;
+func str_plus: Str -> Str, Str;
+
+func empty: Empty -> Empty;
