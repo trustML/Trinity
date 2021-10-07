@@ -14,7 +14,7 @@ class Stmt:
         self.args = args
         self.lhs = lhs
         #FIXME: assuming all statements return tables.
-        self.type = 'Table'
+        self.type = None
     
     def __repr__(self):
         return str(self.lhs) + ' = ' + str(self.opcode) + '(' + str(self.args) + ')'
@@ -174,6 +174,7 @@ class BidirectEnumerator(Enumerator):
         return cur
 
     def enforceSketch(self, sk):
+        # print(list(filter(lambda e: e.name==x, self._functions)))
         op_ids = list(map(lambda x: list(filter(lambda e: e.name==x, 
                                     self._functions))[0].id, sk.split()))
         self.z3_solver.push()
