@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import tyrell.spec as S
-from tyrell.enumerator import SmtEnumerator, ExhaustiveEnumerator, RandomEnumerator
+from tyrell.enumerator import SmtEnumerator, ExhaustiveEnumerator, RandomEnumerator, BidirectEnumerator
 from tyrell.decider import Example, ExampleConstraintDecider
 from tyrell.synthesizer import Synthesizer
 from tyrell.logger import get_logger
@@ -18,7 +18,7 @@ def get_samples_of_type(sample_type):
         return (0, 1, 2, 4, 9)
     if sample_type == ("Int", "Int"):
         return ((0, 0), (1, 4), (3, 2), (4, 12), (9, 2))
-    if sample_type == ("List",)):
+    if sample_type == ("List",):
         return ([0, 1, 8, 3], [1], [12, 3, 8, 1], [9, 8, 7, 2])
 
     assert False
@@ -52,7 +52,7 @@ def do_make_progs(progtype, n, depth_bound):
 
 def do_synthesize(progtype, examples):
     logger.info('Parsing Spec...')
-    spec = parse_spec_with_progspec('grammar.tyrell', *progtype)
+    spec = parse_spec_with_progspec('grammar_int.tyrell', *progtype)
     logger.info('Parsing succeeded')
 
     logger.info('Building synthesizer...')
@@ -67,12 +67,18 @@ def do_synthesize(progtype, examples):
     #out_value = interpreter.eval(prog, input0)
     #print(out_value)
 #
+
+    # Reading the n-gram model.
+    with open("proto.ngram", "r") as f:
+        sketches = [p.strip() for p in f.readlines()]
+    
     #return None
     for loc in range(1, loc_max):
         synthesizer = Synthesizer(
             # enumerator=SmtEnumerator(spec, depth=3, loc=1), # plus(@param1, @param0) / plus(@param0, @param1)
             # enumerator=SmtEnumerator(spec, depth=4, loc=3), # plus(plus(@param0, const(_apple_)), @param1)
-            enumerator=SmtEnumerator(spec, depth=depth_bound, loc=loc), # plus(plus(@param0, const(_apple_)), @param1)
+            # enumerator=SmtEnumerator(spec, depth=depth_bound, loc=loc), # plus(plus(@param0, const(_apple_)), @param1)
+            enumerator = BidirectEnumerator(spec, depth=depth_bound, loc=loc, sk_queue=sketches),
             decider=ExampleConstraintDecider(
                 spec=spec,
                 interpreter=ToyInterpreter(),
@@ -100,15 +106,15 @@ def there_and_back_again(progtype, prog):
     print(back_again)
     print(there)
 
-list2_int_progs = do_make_progs((("Int", "Int"), "Int"), 20, 4)
-
-for p in list2_int_progs:
-    print(p)
-
-there_and_back_again((("Int", "Int"), "Int"), list2_int_progs[0])
+# list2_int_progs = do_make_progs((("Int", "Int"), "Int"), 20, 4)
+# 
+# for p in list2_int_progs:
+#     print(p)
+# 
+# there_and_back_again((("Int", "Int"), "Int"), list2_int_progs[0])
 
 #dataset_synthesize("bool_bool", "const_false")
-#dataset_synthesize("int2_int", "plus")
+dataset_synthesize("int2_int", "plus")
 #dataset_synthesize("list2_int", "deepcoder_demo")
 #dataset_synthesize("str2_str", "demo_string_enumerator")
 #dataset_synthesize("str_str", "prepend_apple")

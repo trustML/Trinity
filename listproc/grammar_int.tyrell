@@ -1,0 +1,17 @@
+enum ConstInt {
+	"-5", "-4", "-3", "-2", "-1", "0", "1", "2", "3", "4", "5"
+}
+
+value Empty;
+
+value Int;
+
+[[PROGSPEC]]
+func empty: Empty -> Empty;
+
+# basic arithmetics
+# func pos: Int -> Int;
+# func neg: Int -> Int;
+func plus: Int -> Int, Int;
+func minus: Int -> Int, Int;
+func mul: Int -> Int, Int;
