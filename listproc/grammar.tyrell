@@ -23,6 +23,7 @@ value List;
 value Fn;
 
 [[PROGSPEC]]
+func empty: Empty -> Empty;
 
 # consts
 func bool_const: Bool -> ConstBool;
@@ -67,5 +68,3 @@ func is_odd: Bool -> Int;
 
 func str_const: Str -> ConstStr;
 func str_plus: Str -> Str, Str;
-
-func empty: Empty -> Empty;
